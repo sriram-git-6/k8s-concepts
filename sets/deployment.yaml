@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: nginx-deployment
+  labels:                    # these labels are replicaset labels. Every k8s resource can have labels.
+    app: roboshop
+    tier: frontend
+spec:
+  replicas: 3
+  selector:
+    matchlabels:             # these labels should match with pod labels.
+      tier: frontend
+      webserver: nginx       
+      env: dev
+  template:                  # template means pod definition.
+    metadata:
+      labels:
+        tier: frontend
+        webserver: nginx       
+        env: dev
+    spec:
+      containers:
+        - name: frontend-deploy-cntr
+          image: nginx:1.14.2
+          ports:
+            - containerPort: 80
+# kubectl apply deployment.yaml
+# kubectl get deployment
+# kubectl get rs (when you create deployment replicaset also gets created)
+# now iam changing the application version from nginx:1.14.2 to nginx:latest.
+# Here how the application version is getting updated without downtime is intially deployment gets created after you apply and this 
+# deployment creates one replicaset and this replicaset create pods as you specified in the replicas attribute in manifest file. 
+# If i would like to perform a rolling update to the image, moving it to a new version what happens is deployment creates a new
+# replicaset and it will creates the pods.
+# Rolling update is a strategy in which the new version of your application is deployed to replace the previous version 
+# without causing downtime.It achieves this by incrementally updating instances of the application, one at a time, while keeping 
+# the remaining instances running. 

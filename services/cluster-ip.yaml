@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  labels:
+    app: frontend
+    env: dev
+spec:
+  containers: 
+    - name: nginx-pod-cntr
+      image: nginx
+      ports:
+        - containerPort: 80
+          name: http-web-service
+---
+
+# ClusterIP: ClusterIP is used for communication between different components or microservices within a Kubernetes cluster.
+# ClusterIP service exposes the pods that are internal to the k8s cluster.
+# This ip cannot access from the outside of the cluster.This type of service is useful when u dont want to expose your application 
+# to outside world, but all pods inside the cluster can access it. ex: database
+# if we want to communicate with pods we communicate to service insead of communicating directly with pods. If there are 100 pods running 
+# how service knows to which pod  it should send request to, using selectors and labels. this selector in service should match with 
+# the pod label in the deployment file.
+
+apiVersion: v1
+kind: service
+metadata:
+  name: nginx-service
+spec: 
+  selector: 
+      app: frontend
+      env: dev  
+  ports:
+    - name: nginx-service-port
+      port: 80 # it is the port where service will receive the request or the port on which the Service will be exposed outside the cluster.
+      targetPort: 80 or http-web-service # the port on which the container is running
+      protocol: TCP
+
+# kubectl apply -f cluster-ip.yaml
+# kubectl get service     
+# Login into another pod and try to access this pod (nginx-pod)
+# kubectl exec -it multicontainer -c sidecar -- bash
+# curl 10.38.111.7 (the cluster ip of the above created service) after executing this command you should get the nginx page. 

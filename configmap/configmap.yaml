@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: course-config
+data:
+  COURSE: DEVOPS
+  DURATION: 100HRS
+  TRAINER: SRIRAM  
+
+# kubectl apply -f configmap.yaml ; kubectl get configmaps; kubectl describe configmap course-config
+
+# configuration is created through configmap now how do we attach it to the pod?
+
+

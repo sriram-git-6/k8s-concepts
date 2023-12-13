@@ -1,0 +1,15 @@
+apiversion: v1
+kind: Namespace
+metadata:
+  name: roboshop
+
+# kubectl create -f namespace.yaml   
+
+# kubectl create command is used for creating new resource but it is not designed for updating the existing resources. 
+
+# If you try to use kubectl create with the same resource name again, you will get an error.
+
+# kubectl apply allows you to create, update, or delete resources. If the resource already exists, kubectl apply will update
+
+# it to match the specified configuration. If the resource does not exist, it will be created.
+

@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: resources
+  namespace: roboshop
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+      resources:
+      # requests specifies the amount of CPU and memory that Kubernetes should initially allocate for a container when it starts.
+        requests:
+          cpu: "100m"
+          memory: "128Mi" 
+      # limits specifies the maximum amount of CPU and memory that a container is allowed to use.    
+        limits:
+          cpu: "200m"  
+          memory: "256Mi"
+
+# No of cpu cores = milliCPU/1000
+# CPU 100m means 100 milliCPU means it is requesting 0.1 cpu cores.  
+# 1000 millicpu = 1 CPU core        
+
+# memory=128Mi means 128 megabytes.
+
+# kubectl apply -f resources.yaml
+# kubectl get pods
+# kubectl describe pod resources
+
+# Image pull policy:
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: resources
+  namespace: roboshop
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+      imagePullPolicy: Always
+      resources:
+      # requests specifies the amount of CPU and memory that Kubernetes should initially allocate for a container when it starts.
+        requests:
+          cpu: "100m"
+          memory: "128Mi" 
+      # limits specifies the maximum amount of CPU and memory that a container is allowed to use.    
+        limits:
+          cpu: "200m"  
+          memory: "256Mi"
+# Always: If you mention imagePullPolicy as Always then k8s always pulls the image from the repository(docker hub) instead of searching 
+
+# the image locally.
+
+# IfNotPresent: If you mention imagePullPolicy as IfNotPresent then k8s always pulls the image from the repository(docker hub) if it is
+
+# not available locally.
+
+# Never: This policy tells Kubernetes to never pull the image, assuming it exists locally.

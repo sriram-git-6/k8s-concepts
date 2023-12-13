@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  labels:
+    app: frontend
+    env: dev
+spec:
+  containers: 
+    - name: nginx-pod-cntr
+      image: nginx
+      ports:
+        - containerPort: 80
+          name: http-web-service
+
+# In Kubernetes, a NodePort service is a type of service that exposes a set of pods to the outside world on a specific port 
+# of each node in the cluster. This means that any traffic sent to that port goes to that service and is forwarded to the respective pods.
+# NodePort services are useful when you need to expose your application externally for testing or if you have external 
+# services that need to communicate with your Kubernetes cluster. However, they might not be suitable for production scenarios.
+# NodePort does not have externalIP, external traffic will be coming to any node on one specific port and from there it is farwarded to
+# clusterIP and from there the request is sent to the respective pod.  
+# traffic-->port on the node-->service-->pod
+
+apiVersion: v1
+kind: service
+metadata:
+  name: nginx-service
+spec: 
+  type: NodePort
+  selector: 
+      app: frontend
+      env: dev  
+  ports:
+    - name: nginx-service-port
+      port: 80 # it is the port where service will receive the request or the port on which the Service will be exposed outside the cluster.
+      targetPort: 80 or http-web-service # the port on which the container is running
+      protocol: TCP
+

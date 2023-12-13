@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  labels:
+    app: frontend
+    env: dev
+spec:
+  containers: 
+    - name: nginx-pod-cntr
+      image: nginx
+      ports:
+        - containerPort: 80
+          name: http-web-service
+
+# This type of service exposes the pods externaly using cloud providers load balancers.
+# It acts like a cluster ip and node port internally.
+# kubernetes will send the msg to the cloud provider who is hosting the cluster asking to create a load balancer and that should be 
+# pointing to all external node ip's on a specific node port. If provider doesnot support load balancing it acts like a nodeport.
+# Cloud controller manager will create the corresponding load balancer.
+# traffic --->loadbalancer --->NodePort--->clusterIP ---> pod
+
+
+apiVersion: v1
+kind: service
+metadata:
+  name: nginx-service
+spec: 
+  type: LoadBalancer
+  selector: 
+      app: frontend
+      env: dev  
+  ports:
+    - name: nginx-service-port
+      port: 80 # it is the port where service will receive the request or the port on which the Service will be exposed outside the cluster.
+      targetPort: 80 or http-web-service # the port on which the container is running
+      protocol: TCP
+
+# After creating the loadbalancer take the dns and access it in your browser nginx server should be opened.
+# Now create a record for that dns name in our route53.
+# give the record name like k8(.devops746.online) and in alias session select Alias to application and classic loadbalancer and select 
+# the loadbalancer that is created through the service and select the region (us-east-1) and create the record.
+# Now copy the record name k8.devops.online from route53 and access it from browser, nginx server should be opened.

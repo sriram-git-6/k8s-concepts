@@ -1,0 +1,54 @@
+# labels: labels are used to identify and organize objects.
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: labels
+  namespace: roboshop
+  labels:
+    env: prod
+    app: nginx
+spec:
+  containers:
+    - name: nginx-label
+      image: nginx:1.14.2
+      ports:
+        - containerPort: 80
+
+# kubectl apply labels.yaml
+
+# kubectl describe pod labels ---> It shows all information about the pod. In that you can see the labels you defined.
+
+
+# Annotations 
+# Annotations are meant to store additional information about the resource. 
+# Annotations are typically used to provide extra context, documentation, or configuration details of the resource.
+# In annotations in both keys and values we can have speacial characters. 
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+  annotations:
+    description: "This is a sample pod for demonstration purposes."
+    owner: "John Doe"
+spec:
+  containers:
+    - name: mycontainer
+      image: nginx:latest
+
+# In annotations in both keys and values we can have speacial characters. 
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: annotations
+  annotations:
+    com.project.author: "sriram"
+    com.project.name: "John Doe"
+spec:
+  containers:
+    - name: mycontainer
+      image: nginx:latest
+      ports:
+        - containerPort: 80

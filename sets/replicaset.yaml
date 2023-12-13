@@ -1,0 +1,34 @@
+# ReplicaSet ensures that a specified number of replicas (identical copies) of a pod are running at all times.
+# If the number of replicas falls below the desired count, it automatically creates new pods to meet the specified count.
+# It uses a selector to identify and manage the pods it is responsible for. 
+
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata: 
+  name: frontend-replicaset
+  labels:                    # these labels are replicaset labels. Every k8s resource can have labels.
+    app: roboshop
+    tier: frontend
+spec:
+  replicas: 3
+  selector:
+    matchlabels:             # these labels should match with pod labels.
+      tier: frontend
+      webserver: nginx       
+      env: dev
+  template:                  # template means pod definition.
+    metadata:
+      labels:
+        tier: frontend
+        webserver: nginx       
+        env: dev
+    spec:
+      containers:
+        - name: frontend-cntr
+          image: nginx
+
+# kubectl apply -f replicaset.yaml
+# kubectl get pods
+# kubectl get rs  --> It shows the replicaset with no of desired pods, current pods running and the no of replicas that 
+# are ready(i.e., have passed their readiness checks). 
+
